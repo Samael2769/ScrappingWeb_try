@@ -7,6 +7,32 @@
 
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+import mechanicalsoup
+
+browser = mechanicalsoup.Browser()
+
+def mechanical_scrapper():
+    url = "http://olympus.realpython.org/login"
+    base_url = "http://olympus.realpython.org"
+    login_page = browser.get(url)
+    login_html = login_page.soup
+    form = login_html.select("form")[0]
+    form.select("input")[0]["value"] = "zeus"
+    form.select("input")[1]["value"] = "ThunderDude"
+    profiles_page = browser.submit(form, login_page.url)
+    print(profiles_page.soup.title.text)
+    if profiles_page.soup.title.text == "Log In":
+        print("Login failed")
+        return
+    else:
+        print("Login successful")
+    print(profiles_page.url)
+    links = profiles_page.soup.select("a")
+    for link in links:
+        address = link["href"]
+        text = link.text
+        print(f"{text}: {base_url}{address}")
+    
 
 def html_parser_exo1():
     url = "http://olympus.realpython.org/profiles"
@@ -33,4 +59,5 @@ def url_parser():
 def webscrapper():
     #url_parser()
     #html_parser()
-    html_parser_exo1()
+    #html_parser_exo1()
+    mechanical_scrapper()
