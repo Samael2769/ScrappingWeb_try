@@ -8,8 +8,19 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import mechanicalsoup
+import time
 
 browser = mechanicalsoup.Browser()
+
+def real_time_scrapper():
+    for i in range(10):
+        page = browser.get("http://olympus.realpython.org/dice")
+        tag = page.soup.select("#result")[0]
+        result = tag.text
+        print(f"The result of your dice roll is: {result}")
+        if i < 9:
+            print("Rolling again...")
+            time.sleep(2)
 
 def mechanical_scrapper():
     url = "http://olympus.realpython.org/login"
@@ -60,4 +71,5 @@ def webscrapper():
     #url_parser()
     #html_parser()
     #html_parser_exo1()
-    mechanical_scrapper()
+    #mechanical_scrapper()
+    real_time_scrapper()
