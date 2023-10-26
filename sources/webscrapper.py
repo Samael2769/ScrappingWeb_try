@@ -9,6 +9,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import mechanicalsoup
 import time
+import sys
 
 browser = mechanicalsoup.Browser()
 
@@ -67,9 +68,16 @@ def url_parser():
     html = html_bytes.decode("utf-8")
     print(html)
 
+
+def scraper(url):
+    page = urlopen(url)
+    html = page.read().decode("utf-8")
+    return html
+
 def webscrapper():
-    #url_parser()
-    #html_parser()
-    #html_parser_exo1()
-    #mechanical_scrapper()
-    real_time_scrapper()
+    if len(sys.argv) != 3:
+        print("Usage: python3 webscrapper.py <url> <output_file>")
+        return
+    text = scraper(sys.argv[1])
+    with open(sys.argv[2], "w") as f:
+        f.write(text)
